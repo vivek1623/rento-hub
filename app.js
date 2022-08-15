@@ -7,6 +7,9 @@ const xss = require("xss-clean")
 // const hpp = require("hpp")
 const path = require("path")
 
+const AppError = require("./utils/appError")
+
+const userRouter = require("./routers/userRouter")
 
 const app = express()
 
@@ -73,13 +76,11 @@ app.use((req, res, next) => {
 })
 
 
-// below routes are equivalent to above commented routes
+app.use("/api/v1/users", userRouter)
 
-// app.use("/api/v1/users", userRouter)
-
-// app.all("*", (req, res, next) => {
-//   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404))
-// })
+app.all("*", (req, res, next) => {
+  next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404))
+})
 
 // app.use(errorController)
 
