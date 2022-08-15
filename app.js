@@ -6,6 +6,7 @@ const mongoSanitize = require("express-mongo-sanitize")
 const xss = require("xss-clean")
 // const hpp = require("hpp")
 const path = require("path")
+const cors = require('cors')
 
 const AppError = require("./utils/appError")
 
@@ -50,6 +51,8 @@ app.use(mongoSanitize())
 
 // Data sanitization against XSS
 app.use(xss())
+
+app.use(cors())
 
 // Prevent parameter pollution
 // app.use(
