@@ -59,8 +59,7 @@ exports.createOne = (Model, responseKey) =>
 
 exports.updateOne = (Model, responseKey) =>
   catchAsync(async (req, res, next) => {
-    if(req.body.id)
-      delete req.body.id
+    if (req.body.id) delete req.body.id
     const doc = await Model.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
       runValidators: true,
@@ -85,7 +84,7 @@ exports.deleteOne = (Model, responseKey) =>
       return next(
         new AppError(`Document with ID: ${req.params.id} is not found`, 404)
       )
-    res.status(204).json({
+    res.status(200).json({
       status: "success",
       data: {
         message: `${responseKey} deleted successfully`,
