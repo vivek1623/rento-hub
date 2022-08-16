@@ -2,7 +2,7 @@
 /* eslint-disable node/no-unsupported-features/es-syntax */
 const jwt = require("jsonwebtoken")
 // const crypto = require("crypto")
-// const util = require("util")
+const util = require("util")
 
 const User = require("../models/userModel")
 const AppError = require("../utils/appError")
@@ -71,18 +71,19 @@ exports.protect = catchAsync(async (req, res, next) => {
   if (
     req.headers.authorization &&
     req.headers.authorization.startsWith("Bearer")
-  ) {
+  )
     token = req.headers.authorization.split(" ")[1]
-  }
 
-  if (!token) {
+  if (!token)
     return next(
       new AppError("You are not logged in! Please log in to get access.", 401)
     )
-  }
 
   // 2) Verification token
-  const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET)
+  const decoded = await util.promisify(jwt.verify)(
+    token,
+    process.env.JWT_SECRET_KEY
+  )
 
   // 3) Check if user still exists
   const currentUser = await User.findById(decoded.id)
@@ -106,3 +107,13 @@ exports.protect = catchAsync(async (req, res, next) => {
   req.user = currentUser
   next()
 })
+
+exports.permitted = roles => {
+  return (req, res, next) => {
+    if (!roles.includes(req.user.role))
+      return next(
+        new AppError("You do not have permission to perform this action", 403)
+      )
+    next()
+  }
+}
