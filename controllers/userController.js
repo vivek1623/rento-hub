@@ -5,6 +5,21 @@ const ApiFeatures = require("../utils/apiFeatures")
 const catchAsync = require("../utils/catchAsync")
 const factory = require("../controllers/handlerFactory")
 
+const filterObj = (obj, ...allowedFields) => {
+  const filteredObj = {}
+  Object.keys(obj).forEach((el) => {
+    if (allowedFields.includes(el)) filteredObj[el] = obj[el]
+  })
+  return filteredObj
+}
+
+exports.filterConfidentialDataFromBody = (req, res, next) => {
+  if (req.body.password)
+    return next(new AppError("password updation is not allowed", 401))
+  req.body = filterObj(req.body, "email", "name", "role", "active")
+  next()
+}
+
 exports.getAllUsers = catchAsync(async (req, res, next) => {
   const features = new ApiFeatures(User.find(), req.query)
     .filter()
@@ -23,4 +38,6 @@ exports.getAllUsers = catchAsync(async (req, res, next) => {
   })
 })
 
+exports.getUser = factory.getOne(User, "user")
+exports.updateUser = factory.updateOne(User, "user")
 exports.deleteUser = factory.deleteOne(User, "user")

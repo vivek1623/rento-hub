@@ -59,6 +59,8 @@ exports.createOne = (Model, responseKey) =>
 
 exports.updateOne = (Model, responseKey) =>
   catchAsync(async (req, res, next) => {
+    if(req.body.id)
+      delete req.body.id
     const doc = await Model.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
       runValidators: true,
