@@ -3,6 +3,7 @@ const User = require("../models/userModel")
 const AppError = require("../utils/appError")
 const ApiFeatures = require("../utils/apiFeatures")
 const catchAsync = require("../utils/catchAsync")
+const factory = require("../controllers/handlerFactory")
 
 exports.getAllUsers = catchAsync(async (req, res, next) => {
   const features = new ApiFeatures(User.find(), req.query)
@@ -18,6 +19,8 @@ exports.getAllUsers = catchAsync(async (req, res, next) => {
     status: "success",
     data: {
       users,
-    }
+    },
   })
 })
+
+exports.deleteUser = factory.deleteOne(User, "user")

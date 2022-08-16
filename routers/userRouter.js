@@ -11,9 +11,9 @@ router.post("/login", authController.login)
 //All of below route should be protected
 router.use(authController.protect)
 
-
 //All of below route should be accessable by ADMIN only
 router.use(authController.permitted(["manager"]))
 router.route("/").get(userController.getAllUsers)
+router.route("/:id").delete(userController.deleteUser)
 
 module.exports = router
