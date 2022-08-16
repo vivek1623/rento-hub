@@ -6,7 +6,7 @@ const ApiFeatures = require("../utils/apiFeatures")
 exports.getAll = (Model, responseKey) =>
   catchAsync(async (req, res, next) => {
     const filter = {}
-    if (req.params.tourId) filter.tour = req.params.tourId //HACK For Reviews
+    console.log("sdaDA",req.query)
 
     const features = new ApiFeatures(Model.find(filter), req.query)
       .filter()

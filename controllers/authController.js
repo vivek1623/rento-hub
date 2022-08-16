@@ -108,7 +108,7 @@ exports.protect = catchAsync(async (req, res, next) => {
   next()
 })
 
-exports.permitted = roles => {
+exports.permitted = (roles) => {
   return (req, res, next) => {
     if (!roles.includes(req.user.role))
       return next(
@@ -116,4 +116,14 @@ exports.permitted = roles => {
       )
     next()
   }
+}
+
+exports.setLoginUserIdInBody = (req, res, next) => {
+  if (!req.body.user) req.body.user = req.user.id
+  next()
+}
+
+exports.setLoginUserIdInQuery = (req, res, next) => {
+  req.query.user = req.user.id
+  next()
 }

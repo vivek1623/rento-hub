@@ -1,7 +1,7 @@
 const express = require("express")
 
 const authController = require("../controllers/authController")
-const reviewController = require("../controllers/reviewController")
+const reservationController = require("../controllers/reservationController")
 
 const router = express.Router()
 
@@ -13,12 +13,22 @@ router
   .post(
     authController.permitted(["user"]),
     authController.setLoginUserIdInBody,
-    reviewController.createReview
+    reservationController.createReservation
   )
+
+  router
+  .route("/myReservations")
+  .get(
+    authController.permitted(["user"]),
+    authController.setLoginUserIdInQuery,
+    reservationController.getAllReservations
+  )
+
+router.route("/:id").delete(reservationController.deleteReservation)
 
 //All of below route should be accessable by ADMIN only
 router.use(authController.permitted(["manager"]))
 
-router.route("/").get(reviewController.getAllReviews)
+router.route("/").get(reservationController.getAllReservations)
 
 module.exports = router
