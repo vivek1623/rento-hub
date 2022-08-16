@@ -2,9 +2,7 @@
 const Reservation = require("../models/reservationModel")
 
 const factory = require("../controllers/handlerFactory")
-const catchAsync = require("../utils/catchAsync")
 
-
-exports.getAllReservations = factory.getAll(Reservation, "reservation")
-exports.createReservation = factory.createOne(Reservation, "reservations")
+exports.getAllReservations = factory.getAll(Reservation, "reservations")
+exports.createReservation = factory.createOne(Reservation, "reservation")
 exports.deleteReservation = factory.deleteOne(Reservation, "reservation")
