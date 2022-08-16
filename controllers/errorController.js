@@ -53,8 +53,10 @@ const sendDevelopmentError = (err, res) => {
 module.exports = (err, req, res, next) => {
   err.statusCode = err.statusCode || 500
   err.status = err.status || "error"
+  console.log(err.statusCode, err.message, process.env.NODE_ENV)
   if (process.env.NODE_ENV === "production") {
-    let error = JSON.parse(JSON.stringify(err))
+    // let error = JSON.parse(JSON.stringify(err))
+    let error = err
     if (error.name === "CastError") error = handleMongoDBCastError(error)
     if (error.name === "ValidationError")
       error = handleMongoDBValidationError(error)

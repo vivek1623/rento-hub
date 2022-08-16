@@ -76,10 +76,9 @@ app.use(express.static(path.join(__dirname, "public")))
 // Test middleware
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString()
-  // console.log(req.headers);
+  // console.log("req.body",req.body);
   next()
 })
-
 
 app.use("/api/v1/users", userRouter)
 
