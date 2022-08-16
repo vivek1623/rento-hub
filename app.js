@@ -12,6 +12,7 @@ const AppError = require("./utils/appError")
 
 const userRouter = require("./routers/userRouter")
 const vehicleRouter = require("./routers/vehicleRouter")
+const reviewRouter = require("./routers/reviewRouter")
 const errorController = require("./controllers/errorController")
 
 const app = express()
@@ -82,6 +83,7 @@ app.use((req, res, next) => {
 
 app.use("/api/v1/users", userRouter)
 app.use("/api/v1/vehicles", vehicleRouter)
+app.use("/api/v1/reviews", reviewRouter)
 
 app.all("*", (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404))

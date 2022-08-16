@@ -14,6 +14,7 @@ const reviewSchema = new Schema(
       type: Number,
       min: [1, "Rating must be above 1.0"],
       max: [5, "Rating must be below 5.0"],
+      required: [true, "rating must be avaliable"],
     },
     vehicle: {
       type: Schema.ObjectId,
@@ -35,6 +36,49 @@ const reviewSchema = new Schema(
     toObject: { virtuals: true },
   }
 )
+
+reviewSchema.pre(/^find/, function(next) {
+  this.populate({
+    path: "user",
+    select: "name",
+  })
+  this.populate({
+    path: "vehicle",
+    select: "model",
+  })
+  next()
+})
+
+reviewSchema.statics.calcAverageRatings = async function(vehicleId) {
+  const stats = await this.aggregate([
+    {
+      $match: { vehicle: vehicleId },
+    },
+    {
+      $group: {
+        _id: "$vehicle",
+        ratingCount: { $sum: 1 },
+        avgRating: { $avg: "$rating" },
+      },
+    },
+  ])
+  console.log("stats", stats)
+  if (stats.length > 0)
+    await Vehicle.findByIdAndUpdate(vehicleId, {
+      ratingsQuantity: stats[0].ratingCount,
+      ratingsAverage: stats[0].avgRating,
+    })
+  else
+    await Vehicle.findByIdAndUpdate(vehicleId, {
+      ratingsQuantity: 0,
+      ratingsAverage: 3.5,
+    })
+}
+
+reviewSchema.post("save", function(review, next) {
+  this.constructor.calcAverageRatings(review.vehicle)
+  next()
+})
 
 const Review = model("Review", reviewSchema)
 
