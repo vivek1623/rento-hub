@@ -1,19 +1,19 @@
 // /* eslint-disable node/no-unsupported-features/es-syntax */
 const AppError = require("../utils/appError")
 
-const handleMongoDBCastError = err => {
+const handleMongoDBCastError = (err) => {
   const message = `Invalid ${err.path}: ${err.value}.`
   return new AppError(message, 400)
 }
 
-const handleMongoDBValidationError = err => {
+const handleMongoDBValidationError = (err) => {
   // eslint-disable-next-line node/no-unsupported-features/es-builtins
-  const errors = Object.values(err.errors).map(el => el.message)
+  const errors = Object.values(err.errors).map((el) => el.message)
   const message = `Invalid input data. ${errors.join(". ")}`
   return new AppError(message, 400)
 }
 
-const handleMongoDBDuplicateFieldsError = err => {
+const handleMongoDBDuplicateFieldsError = (err) => {
   const value = Object.keys(err.keyValue).join(",")
   const message = `Duplicate field value: [${value}]. Please use another value`
   return new AppError(message, 400)
@@ -29,13 +29,13 @@ const sendProductionError = (err, res) => {
   if (err.isOperational)
     res.status(err.statusCode).json({
       status: err.status,
-      message: err.message
+      message: err.message,
     })
   else {
     console.log("Error:", err)
     res.status(500).json({
       status: "error",
-      message: "Something went wrong which is not operational"
+      message: "Something went wrong which is not operational",
     })
   }
 }
@@ -46,7 +46,7 @@ const sendDevelopmentError = (err, res) => {
     status: err.status,
     error: err,
     message: err.message,
-    stack: err.stack
+    stack: err.stack,
   })
 }
 
