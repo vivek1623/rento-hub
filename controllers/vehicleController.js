@@ -8,7 +8,7 @@ const factory = require("../controllers/handlerFactory")
 const filterObjectData = require("../utils/filterObjectData")
 
 exports.filterDataFromBody = (req, res, next) => {
-  req.body = filterObjectData(req.body, "model", "color", "location")
+  req.body = filterObjectData(req.body, "model", "color", "location", "description")
   next()
 }
 
