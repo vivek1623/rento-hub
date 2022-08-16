@@ -1,22 +1,17 @@
 /* eslint-disable node/no-unsupported-features/es-syntax */
 const User = require("../models/userModel")
+
+const factory = require("../controllers/handlerFactory")
+
+const filterObjectData = require("../utils/filterObjectData")
 const AppError = require("../utils/appError")
 const ApiFeatures = require("../utils/apiFeatures")
 const catchAsync = require("../utils/catchAsync")
-const factory = require("../controllers/handlerFactory")
-
-const filterObj = (obj, ...allowedFields) => {
-  const filteredObj = {}
-  Object.keys(obj).forEach((el) => {
-    if (allowedFields.includes(el)) filteredObj[el] = obj[el]
-  })
-  return filteredObj
-}
 
 exports.filterConfidentialDataFromBody = (req, res, next) => {
   if (req.body.password)
     return next(new AppError("password updation is not allowed", 401))
-  req.body = filterObj(req.body, "email", "name", "role", "active")
+  req.body = filterObjectData(req.body, "email", "name", "role", "active")
   next()
 }
 

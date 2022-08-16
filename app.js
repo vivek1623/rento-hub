@@ -6,12 +6,12 @@ const mongoSanitize = require("express-mongo-sanitize")
 const xss = require("xss-clean")
 // const hpp = require("hpp")
 const path = require("path")
-const cors = require('cors')
+const cors = require("cors")
 
 const AppError = require("./utils/appError")
 
 const userRouter = require("./routers/userRouter")
-
+const vehicleRouter = require("./routers/vehicleRouter")
 const errorController = require("./controllers/errorController")
 
 const app = express()
@@ -29,7 +29,7 @@ app.use(
     max: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
     standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
     legacyHeaders: false, // Disable the `X-RateLimit-*` headers
-    message: "Too many requests from this IP, please try again in an hour!"
+    message: "Too many requests from this IP, please try again in an hour!",
   })
 )
 
@@ -81,6 +81,7 @@ app.use((req, res, next) => {
 })
 
 app.use("/api/v1/users", userRouter)
+app.use("/api/v1/vehicles", vehicleRouter)
 
 app.all("*", (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404))
