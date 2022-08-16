@@ -12,7 +12,7 @@ const sendEmail = async options => {
   })
 
   await transporter.sendMail({
-    from: `Natours <${process.env.EMAIL_FROM}>`, // sender address
+    from: `RentoHub <${process.env.EMAIL_FROM}>`, // sender address
     ...options
   })
 }
