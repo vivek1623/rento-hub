@@ -28,7 +28,7 @@ router.route("/:id").delete(reservationController.deleteReservation)
 
 //All of below route should be accessable by ADMIN only
 router.use(authController.permitted(["manager"]))
-
+router.route("/vehicleReservations").get(reservationController.getVehicleReservations)
 router.route("/userReservations").get(reservationController.getUserReservations)
 router.route("/").get(reservationController.getAllReservations)
 
