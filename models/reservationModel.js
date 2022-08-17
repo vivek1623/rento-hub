@@ -36,10 +36,9 @@ reservationSchema.pre(/^find/, function(next) {
   this.populate({
     path: "user",
     select: "name",
-  })
-  this.populate({
+  }).populate({
     path: "vehicle",
-    select: "model",
+    select: "model color location",
   })
   next()
 })
