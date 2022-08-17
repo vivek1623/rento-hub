@@ -16,7 +16,7 @@ router
     reservationController.createReservation
   )
 
-  router
+router
   .route("/myReservations")
   .get(
     authController.permitted(["user"]),
@@ -29,6 +29,7 @@ router.route("/:id").delete(reservationController.deleteReservation)
 //All of below route should be accessable by ADMIN only
 router.use(authController.permitted(["manager"]))
 
+router.route("/userReservations").get(reservationController.getUserReservations)
 router.route("/").get(reservationController.getAllReservations)
 
 module.exports = router
