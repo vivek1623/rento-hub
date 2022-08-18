@@ -19,8 +19,8 @@ const vehicleSchema = new Schema(
     },
     ratingsAverage: {
       type: Number,
-      default: 4.0,
-      min: [1, "Rating must be above 1.0"],
+      default: 3.5,
+      min: [0.5, "Rating must be above 0.5"],
       max: [5, "Rating must be below 5.0"],
       set: (val) => Math.round(val * 10) / 10,
     },
