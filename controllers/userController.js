@@ -15,24 +15,25 @@ exports.filterConfidentialDataFromBody = (req, res, next) => {
   next()
 }
 
-exports.getAllUsers = catchAsync(async (req, res, next) => {
-  const features = new ApiFeatures(User.find(), req.query)
-    .filter()
-    .sort()
-    .limitFields()
-    .paginate()
+// exports.getAllUsers = catchAsync(async (req, res, next) => {
+//   const features = new ApiFeatures(User.find(), req.query)
+//     .filter()
+//     .sort()
+//     .limitFields()
+//     .paginate()
 
-  const users = await features.query.select("-passwordChangedAt")
-  if (!users) return next(new AppError("Something went wrong", 500))
+//   const users = await features.query.select("-passwordChangedAt")
+//   if (!users) return next(new AppError("Something went wrong", 500))
 
-  res.status(200).json({
-    status: "success",
-    data: {
-      users,
-    },
-  })
-})
+//   res.status(200).json({
+//     status: "success",
+//     data: {
+//       users,
+//     },
+//   })
+// })
 
+exports.getAllUsers = factory.getAll(User, "users")
 exports.getUser = factory.getOne(User, "user")
 exports.updateUser = factory.updateOne(User, "user")
 exports.deleteUser = factory.deleteOne(User, "user")
