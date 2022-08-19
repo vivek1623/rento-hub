@@ -19,6 +19,38 @@ exports.filterDataFromBody = (req, res, next) => {
   next()
 }
 
+exports.getVehicleReservationDates = catchAsync(async (req, res, next) => {
+  const vehicle = await Vehicle.findById(req.body.vehicleId)
+  if (!vehicle) return next(new AppError("Something went wrong", 500))
+
+  const stats = await Reservation.aggregate([
+    {
+      $match: {
+        vehicle: vehicle._id,
+      },
+    },
+    {
+      $group: {
+        _id: "$vehicle",
+        reservedDates: {
+          $push: { startDate: "$startDate", endDate: "$endDate" },
+        },
+      },
+    },
+  ])
+
+  let reservedDates = []
+  if (stats.length > 0) reservedDates = stats[0].reservedDates
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      vehicleId: vehicle.id,
+      reservedDates,
+    },
+  })
+})
+
 exports.getAvailableVehicles = catchAsync(async (req, res, next) => {
   let reservedVehicles = []
   console.log(new Date(new Date(req.query.endDate).setHours(23, 59, 59)))

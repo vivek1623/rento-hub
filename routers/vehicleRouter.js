@@ -8,6 +8,9 @@ const router = express.Router()
 //All of below route should be protected
 router.use(authController.protect)
 
+router
+  .route("/vehicleReservationDates")
+  .get(vehicleController.getVehicleReservationDates)
 router.route("/availableVehicles").get(vehicleController.getAvailableVehicles)
 router.route("/").get(vehicleController.getAllVehicles)
 
