@@ -53,7 +53,6 @@ exports.getVehicleReservationDates = catchAsync(async (req, res, next) => {
 
 exports.getAvailableVehicles = catchAsync(async (req, res, next) => {
   let reservedVehicles = []
-  console.log(new Date(new Date(req.query.endDate).setHours(23, 59, 59)))
   if (req.query.startDate && req.query.endDate) {
     const start = new Date(new Date(req.query.startDate).setHours(00, 00, 00))
     const end = new Date(new Date(req.query.endDate).setHours(23, 59, 59))

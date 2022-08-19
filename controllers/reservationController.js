@@ -1,4 +1,5 @@
 /* eslint-disable node/no-unsupported-features/es-syntax */
+const mongoose = require("mongoose")
 const Reservation = require("../models/reservationModel")
 const User = require("../models/userModel")
 const Vehicle = require("../models/vehicleModel")
@@ -44,8 +45,11 @@ exports.getVehicleReservations = catchAsync(async (req, res, next) => {
 exports.getUserReservations = catchAsync(async (req, res, next) => {
   if (!req.query.user) return next(new AppError("UserId is required", 400))
 
+  const isValidId = mongoose.Types.ObjectId.isValid(req.query.user)
+  if (!isValidId) return next(new AppError("Invalid userid", 400))
+
   const user = await User.findById(req.query.user).select("name email")
-  if (!user) return new AppError(`User ID: ${req.query.user} is not found`, 404)
+  if (!user) return next(new AppError(`User ID: ${req.query.user} is not found`, 404))
 
   const features = new ApiFeatures(Reservation.find(), req.query)
     .filter()
