@@ -20,7 +20,7 @@ exports.filterDataFromBody = (req, res, next) => {
 }
 
 exports.getVehicleReservationDates = catchAsync(async (req, res, next) => {
-  const vehicle = await Vehicle.findById(req.body.vehicleId)
+  const vehicle = await Vehicle.findById(req.query.vehicleId)
   if (!vehicle) return next(new AppError("Something went wrong", 500))
 
   const stats = await Reservation.aggregate([
